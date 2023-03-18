@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import boto3
 
 # Create a Python script using boto3 that takes a 
@@ -8,13 +8,15 @@ import boto3
 
 app = FastAPI(title="s3Service")
 
-@app.get("/")
+@app.get("/bucket/{bucket_name}")
 def get_message(bucket_name: str):
     # Create a bucket using boto3 - how very non-cdk of us!
     s3_client = boto3.client('s3')
-    # attempt to create bucket, raise exception on failure for this basic example
-    response = s3_client.create_bucket(Bucket=bucket_name)
-
-    # Response Syntax
-    # {'Location': 'string' }
-    return {"bucket_name": response['Location']}
+    try:
+        # attempt to create bucket, raise exception on failure for this basic example
+        response = s3_client.create_bucket(Bucket=bucket_name)
+        # Response Syntax
+        # {'Location': 'string' }
+        return {"bucket_name": response['Location']}
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to create bucket.")

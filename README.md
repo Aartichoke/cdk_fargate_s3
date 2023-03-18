@@ -66,7 +66,8 @@ This repo leverages cdk to deploy an load balanced fargate service (using cached
   ```
   - Send run command to fargate service endpoint
   ```
-  curl -s http://<url>:80 | jq {"bucket_name":"im_a_bus"}
+  curl -s http://<url>/bucket/examplebucket:80 | jq 
+  {"bucket_name":"http://examplebucket.s3.amazonaws.com/"}
   ```
  
 ## Cleanup
